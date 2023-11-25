@@ -5,13 +5,17 @@ public class Etudiant {
     private int id;
     private String nom;
     private String prenom;
-    private String sexe;
-    // private Formation formation
+    private int formationId;  // L'identifiant de la formation à laquelle l'étudiant appartient
 
-
-    public Etudiant() {
+    // Constructeur
+    public Etudiant(int id, String nom, String prenom, int formationId) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.formationId = formationId;
     }
 
+    // Getters et setters
     public int getId() {
         return id;
     }
@@ -36,12 +40,13 @@ public class Etudiant {
         this.prenom = prenom;
     }
 
-    public String getSexe() {
-        return sexe;
+    public int getFormationId() {
+        return formationId;
     }
 
-    public void setSexe(String sexe) {
-        this.sexe = sexe;
+    public void setFormationId(int formationId) {
+        this.formationId = formationId;
     }
 
+    // il faut que j'ajoute des methodes CRUD
 }
