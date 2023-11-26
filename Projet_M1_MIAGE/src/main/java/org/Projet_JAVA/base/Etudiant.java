@@ -1,5 +1,9 @@
 package org.Projet_JAVA.base;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Etudiant {
     
     private int id;
@@ -48,5 +52,12 @@ public class Etudiant {
         this.formationId = formationId;
     }
 
+     // Méthode pour obtenir le nom complet de l'étudiant
+     public String getNomComplet() {
+        return this.nom + " " + this.prenom;
+    }
+
+
     // il faut que j'ajoute des methodes CRUD
+
 }

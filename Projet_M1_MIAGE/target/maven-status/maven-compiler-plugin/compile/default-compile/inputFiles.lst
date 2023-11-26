@@ -1,12 +1,12 @@
+/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/user_window/MenuPrincipal.java
 /Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/base/Projet.java
 /Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/Connexion/DatabaseConnection.java
 /Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/SystemInfo.java
-/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/FenetreProjet.java
-/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/MenuPrincipal.java
+/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/interface_all/Crud.java
+/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/user_window/AuthentificationInterface.java
 /Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/AppManager/AppManager.java
 /Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/base/Etudiant.java
 /Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/base/Binome.java
+/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/user_window/FenetrePrincipale.java
+/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/user_window/FenetreProjet.java
 /Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/base/Formation.java
-/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/dao/IDao.java
-/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/AuthentificationInterface.java
-/Users/adlanemeraga/Desktop/github/Projet-java-gestion-des-projet-tudiant/Projet_M1_MIAGE/src/main/java/org/Projet_JAVA/FenetrePrincipale.java
