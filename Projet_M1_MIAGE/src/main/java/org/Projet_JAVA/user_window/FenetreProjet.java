@@ -3,6 +3,9 @@ import org.Projet_JAVA.InterfaceController;
 import org.Projet_JAVA.base.Binome;
 import org.Projet_JAVA.base.Etudiant;
 import org.Projet_JAVA.base.Projet;
+import org.Projet_JAVA.base.Note;
+
+
 
 
 
@@ -20,9 +23,11 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -36,7 +41,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 public class FenetreProjet extends Application {
@@ -99,8 +106,6 @@ public class FenetreProjet extends Application {
             Button ajouterButton = new Button("Ajouter");
             ajouterButton.setOnAction(event -> ouvrirBoiteDialogueAjoutProjet(projetTableView));
 
-
-
             // Créer les colonnes de la TableView
             TableColumn<Projet, Integer> idCol = new TableColumn<>("ID Projet");
             idCol.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
@@ -115,8 +120,7 @@ public class FenetreProjet extends Application {
             TableColumn<Projet, String> dateRemisePrevueCol = new TableColumn<>("date de remise");
             dateRemisePrevueCol.setCellValueFactory(new PropertyValueFactory<>("dateRemisePrevue"));
 
-
-           
+            
             // Ajouter les colonnes à la TableView
             projetTableView.getColumns().addAll(idCol, nomMatiereCol, sujetCol,dateRemisePrevueCol);
             projetTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
@@ -128,15 +132,12 @@ public class FenetreProjet extends Application {
             // Gestionnaire d'événements pour la sélection d'un projet
             projetTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
-                    // Afficher la liste des binômes pour le projet sélectionné
-                    try {
-                        afficherBinomes(newValue.getIdProjet());
-                    } catch (SQLException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    afficher_pop_up_choix (newValue, projetTableView); 
+   
                     }
-                }
+             ////////// ne pas oublier d'ajouter une exception pour ce truc              
             });
+
 
             // Récupérer la liste des noms de matières depuis la base de données
             chargerNomsMatieres(matiereComboBox);
@@ -180,9 +181,7 @@ public class FenetreProjet extends Application {
         }
     }
 
-    //redefinition de la methode afficherBinome
-
-   private void afficherBinomes(int idProjet) throws SQLException{
+private void afficherBinomes(int idProjet) throws SQLException {
     // Créer une nouvelle TableView pour les binômes
     TableView<Binome> binomeTableView = new TableView<>();
 
@@ -202,12 +201,45 @@ public class FenetreProjet extends Application {
         return new SimpleStringProperty(binome.getEtudiant2().getNom() + " " + binome.getEtudiant2().getPrenom());
     });
 
-    // creation de la colonne NOTE FINALE qui affiche la note du binome dans le projet (la note n'est pas stocké mais juste Calculé)
-    TableColumn<Binome, Integer> noteFinaleCol = new TableColumn<>("Note finale");
-    noteFinaleCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    // Créer la colonne NOTE FINALE qui affiche la note du binôme dans le projet
+    TableColumn<Binome, String> noteFinaleCol = new TableColumn<>("Note finale");
+    noteFinaleCol.setCellValueFactory(cellData -> {
+        Binome binome = cellData.getValue();
+        // Calculer la note finale pour chaque binôme
+
+        Note note;
+        try {
+
+            // note = interfaceController.getNoteByIdBinome(binome.getId());
+            //refaire la ligne au dessus avec  getNoteByBinome
+            note = interfaceController.getNoteByBinome(binome);
+
+
+        
+            if (note == null) {
+                
+                return new SimpleStringProperty("/");
+            }
+            double note_rapport = note.getNoterapport();
+            double note_soutenance1 = note.getNote_soutenance1();
+            double note_soutenance2= note.getNote_soutenance1();
+            double noteFinale = (note_rapport + (note_soutenance1 + note_soutenance2) / 2) / 2;
+
+            return new SimpleStringProperty(String.format("%.2f", noteFinale));
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+            return new SimpleStringProperty("/");
+            
+
+        }
+        
+
+    });
 
     // Ajouter les colonnes à la TableView des binômes
-    binomeTableView.getColumns().addAll(idBinomeCol, etudiant1Col, etudiant2Col);
+    binomeTableView.getColumns().addAll(idBinomeCol, etudiant1Col, etudiant2Col, noteFinaleCol);
 
     // Récupérer les binômes depuis la base de données pour le projet sélectionné
     chargerBinomes(binomeTableView, idProjet);
@@ -225,7 +257,6 @@ public class FenetreProjet extends Application {
 
     layout.getChildren().addAll(binomeTableView);
 
-
     // Afficher la scène avec les binômes
     Scene scene = new Scene(layout, 500, 300);
     Stage binomeStage = new Stage();
@@ -233,6 +264,7 @@ public class FenetreProjet extends Application {
     binomeStage.setScene(scene);
     binomeStage.show();
 }
+
 
 
 
@@ -370,12 +402,12 @@ public class FenetreProjet extends Application {
 
                 // Vérifier si les champs sont vides
                 if (nomMatiere.isEmpty() || sujet.isEmpty() || dateRemisePrevue == null) {
-                    afficherAlerte("Veuillez remplir tous les champs.");
+                    interfaceController.afficherAlerte("Veuillez remplir tous les champs.");
                     return null;
                 }
                  // Vérifier si la date est ultérieure à la date actuelle
                 if (dateRemisePrevue.isBefore(LocalDate.now())) {
-                afficherAlerte("La date de remise doit être antérieure ou égale à la date actuelle.");
+                interfaceController.afficherAlerte("La date de remise doit être antérieure ou égale à la date actuelle.");
                 return null;
             }
 
@@ -401,13 +433,7 @@ public class FenetreProjet extends Application {
         Optional<Projet> result = dialog.showAndWait();
     }
 
-     private void afficherAlerte(String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+     
 
     // Méthode pour afficher tous les projets
     private void afficherTousLesProjets(TableView<Projet> projetTableView) {
@@ -418,7 +444,49 @@ public class FenetreProjet extends Application {
     chargerProjets(projetTableView);
     }
 
+    private void afficher_pop_up_choix (Projet projet ,TableView<Projet> p) {
+
+        // Créer une boîte de dialogue
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Options du Projet");
+        alert.setHeaderText("Sélectionnez une option pour le projet :\n " + projet.getSujet());
+    
+        // Ajouter des boutons personnalisés
+        ButtonType afficherBinomeButton = new ButtonType("Afficher Binôme");
+        ButtonType supprimerProjetButton = new ButtonType("Supprimer Projet");
+    
+        alert.getButtonTypes().setAll(afficherBinomeButton, supprimerProjetButton, ButtonType.CANCEL);
+    
+        // Attendre la réponse de la boîte de dialogue
+        Optional<ButtonType> result = alert.showAndWait();
+    
+        // Traiter la réponse
+        if (result.isPresent() && result.get() == afficherBinomeButton) {
+            // Afficher les binômes pour le projet sélectionné
+            try {
+                afficherBinomes(projet.getIdProjet());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else if (result.isPresent() && result.get() == supprimerProjetButton) {
+            // Supprimer le projet sélectionné
+            projet.supprimerProjet(projet , connection , interfaceController);
+            // Effacer la TableView
+            if (!p.getItems().isEmpty()) {
+                p.getItems().clear();
+            }
+            
+            // Mettre à jour la TableView
+            chargerProjets(p);
+            // afficherAlerte("faut que j'ajoute le code de la supression");
+        }
+
+
+    }
+
     
 
  
 }
+
+

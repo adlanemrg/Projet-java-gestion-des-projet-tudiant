@@ -33,7 +33,7 @@ public class MenuPrincipal extends Application {
         // Créer des boutons pour chaque fonctionnalité
         Button projetButton = new Button("PROJET");
         Button etudiantsButton = new Button("ETUDIANTS");
-        Button formationButton = new Button("FORMATION");
+        Button noteButton = new Button("NOTES");
 
         // Gestionnaire d'événements pour le bouton PROJET
         projetButton.setOnAction(event -> {
@@ -50,17 +50,17 @@ public class MenuPrincipal extends Application {
             fenetrebinome.start(new Stage());        
         });
 
-        // // Gestionnaire d'événements pour le bouton UE
-        //     // Ajoutez ici le code pour la fenêtre UE
-        //      formationButton.setOnAction(event -> {
-        //     FenetrePrincipale fenetrePrincipale = new  FenetrePrincipale( connection,  primaryStage,  interfaceController);
-        //     fenetrePrincipale.start(new Stage());
-        //     // fenetreProjet.afficherFenetre();
-        // });
+        // Gestionnaire d'événements pour le bouton UE
+            // Ajoutez ici le code pour la fenêtre UE
+             noteButton.setOnAction(event -> {
+            FenetreNote fenetreNote= new FenetreNote( connection,  primaryStage,  interfaceController);
+            fenetreNote.start(new Stage());
+            // fenetreProjet.afficherFenetre();
+        });
 
         // Mise en page
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(projetButton, etudiantsButton, formationButton);
+        layout.getChildren().addAll(projetButton, etudiantsButton, noteButton);
 
         // Affichage de la scène
         Scene scene = new Scene(layout, 300, 200);

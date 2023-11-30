@@ -6,11 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+
 
 import org.Projet_JAVA.base.Binome;
 import org.Projet_JAVA.base.Etudiant;
 import org.Projet_JAVA.base.Note;
 import org.Projet_JAVA.base.Projet;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class InterfaceController  {
 
@@ -65,25 +70,55 @@ public class InterfaceController  {
         return null;
     }
 
-    public Note getNoteByIdBinome(int idBinome) throws SQLException {
+    // public Note getNoteByIdBinome(int idBinome) throws SQLException {
+    //     String selectQuery = "SELECT * FROM note WHERE binome_id = ?";
+    //     try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+    //         preparedStatement.setInt(1, idBinome);
+    //         ResultSet resultSet = preparedStatement.executeQuery();
+
+    //         if (resultSet.next()) {
+    //             // Récupérer les valeurs de la base de données
+    //             double noterapport = resultSet.getDouble("note_rapport");
+    //             double note_soutenance1 = resultSet.getDouble("note_soutenance1");
+    //             double note_soutenance2 = resultSet.getDouble("note_soutenance2");
+
+    //             // Utiliser le constructeur de Note pour créer une instance avec les informations
+    //             // return new Note(idBinome, getBinomeById(idBinome).getProjetId(), getBinomeById(idBinome).getEtudiant1(), getBinomeById(idBinome).getEtudiant2(), noterapport, note_soutenance1, note_soutenance2);
+    //             return new Note(idBinome, getBinomeById(idBinome).getProjetId(), noterapport, note_soutenance1, note_soutenance2);
+
+    //             // return new Note(idBinome, getBinomeById(idBinome).getProjetId(), noterapport, note_soutenance1, note_soutenance2);
+
+    //         }
+    //     }
+    //     // Retourner null si la note n'est pas trouvée
+    //     return null;
+    // }
+
+    public Note getNoteByBinome(Binome binome) throws SQLException {
         String selectQuery = "SELECT * FROM note WHERE binome_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-            preparedStatement.setInt(1, idBinome);
+            preparedStatement.setInt(1, binome.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 // Récupérer les valeurs de la base de données
-                double noterapport = resultSet.getDouble("noterapport");
+                double noterapport = resultSet.getDouble("note_rapport");
                 double note_soutenance1 = resultSet.getDouble("note_soutenance1");
                 double note_soutenance2 = resultSet.getDouble("note_soutenance2");
+                Date date_remise_effective = resultSet.getDate("date_remise_effective");
 
                 // Utiliser le constructeur de Note pour créer une instance avec les informations
-                return new Note(idBinome, getBinomeById(idBinome).getProjetId(), getBinomeById(idBinome).getEtudiant1(), getBinomeById(idBinome).getEtudiant2(), noterapport, note_soutenance1, note_soutenance2);
+                // return new Note(idBinome, getBinomeById(idBinome).getProjetId(), getBinomeById(idBinome).getEtudiant1(), getBinomeById(idBinome).getEtudiant2(), noterapport, note_soutenance1, note_soutenance2);
+                // return new Note(idBinome, getBinomeById(idBinome).getProjetId(), noterapport, note_soutenance1, note_soutenance2);
+
+                return new Note(binome,noterapport, note_soutenance1, note_soutenance2, date_remise_effective);
+
             }
         }
         // Retourner null si la note n'est pas trouvée
         return null;
     }
+
 
 
 
@@ -153,6 +188,14 @@ public class InterfaceController  {
         }
         // Retourner null si le binôme n'est pas trouvé
         return null;
+    }
+
+    public void afficherAlerte(String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 

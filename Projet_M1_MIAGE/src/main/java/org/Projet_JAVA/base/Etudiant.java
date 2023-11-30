@@ -58,6 +58,13 @@ public class Etudiant {
     }
 
 
-    // il faut que j'ajoute des methodes CRUD
+    // redefinition de la methode toString pour l'affichage des etudiants dans une liste pour l'ajout des binomes 
+    @Override
+    public String toString() {
+        // Retourne la représentation textuelle souhaitée (nom, prénom, formation, etc.)
+        return nom + " " + prenom + " - " + formationId; 
+    }
+
+    
 
 }
